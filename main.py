@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+import configparser
+import os
 
 
 class App:
@@ -41,7 +43,7 @@ class App:
             except Exception as e:
                 print('寻找按钮失败', e)
 
-        self.driver.find_element_by_css_selector("#privilege_val").send_keys('tt')
+        self.driver.find_element_by_css_selector("#privilege_val").send_keys(self.dotakey)
         dconfirm_button.click()
         try:
             self.driver.find_element_by_xpath(
@@ -54,9 +56,13 @@ class App:
         dbuy_button.click()
 
 
+def get_config(section, key):
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    return config.get(section, key)
+
+
 if __name__ == '__main__':
-    with open('info.txt', 'r') as f:
-        lines = f.readlines()
-    dotakey = lines[0].split
+    dotakey = get_config('info', 'privilege_val')
     myapp = App(dotakey)
     myapp.run()
