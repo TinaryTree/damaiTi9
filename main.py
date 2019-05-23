@@ -3,7 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import configparser
-###
+
 
 class App:
     def __init__(self, dotakey):
@@ -34,7 +34,7 @@ class App:
         dconfirm_button = self.driver.find_element_by_xpath('//button[@data-spm="dconfirm"]')
         while dconfirm_button.get_attribute('class') == 'privilege_sub disabled':
             print(dconfirm_button.get_attribute('class'), '确定按钮无法点击，刷新页面')
-            # self.driver.refresh()
+            self.driver.refresh()
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, '//button[@data-spm="dconfirm"]')))
             try:
