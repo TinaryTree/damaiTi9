@@ -57,7 +57,7 @@ class App:
 
 def get_config(section, key):
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('config.ini', encoding='UTF-8')
     return config.get(section, key)
 
 
