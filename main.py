@@ -5,11 +5,18 @@ from selenium.webdriver.common.by import By
 import configparser
 
 
+def get_config(section, key):
+    config = configparser.ConfigParser()
+    config.read('config.ini', encoding='UTF-8')
+    return config.get(section, key)
+
+
 class App:
-    def __init__(self, dotakey):
-        self.dotakey = dotakey
-        # self.phone_num = phone_num
-        # self.passwd = passwd
+    dotakey = get_config('info', 'privilege_val')
+    name = get_config('info', 'name')
+    phone = get_config('info', 'phone')
+    round = get_config('model', 'round')
+    quantity = get_config('model', 'quantity')
 
     chromedriver = r"driver/chromedriver.exe"
     driver = webdriver.Chrome(chromedriver)
@@ -50,17 +57,18 @@ class App:
 
         self.driver.find_element_by_css_selector("#privilege_val").send_keys(self.dotakey)
         dconfirm_button.click()
-        try:
-            self.driver.find_element_by_xpath(
-                '//a[@class="cafe-c-input-number-handler cafe-c-input-number-handler-up"]').click()
-        except Exception as e:
-            print("未成功点击+号", e)
-        self.driver.find_element_by_xpath('//div[@class="select_right_list"]/div[3]/span[2]').click()
+        if self.quantity != 1:
+            try:
+                self.driver.find_element_by_xpath(
+                    '//a[@class="cafe-c-input-number-handler cafe-c-input-number-handler-up"]').click()
+            except Exception as e:
+                print("未成功点击+号", e)
+        self.driver.find_element_by_xpath(f'//div[@class="select_right_list"]/div[{self.round}]/span[2]').click()
         dbuy_button = self.driver.find_element_by_xpath('//div[@data-spm="dbuy"]')
         print('寻找按钮:', dbuy_button.text)
         dbuy_button.click()
 
-    def confirm_auto(self, name, phone):
+    def confirm_auto(self):
         """自动确认订单"""
 
         title = self.driver.title
@@ -68,9 +76,9 @@ class App:
             title = self.driver.title
         try:
             self.driver.find_element_by_xpath(
-                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(name)
+                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(self.name)
             self.driver.find_element_by_xpath(
-                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(phone)
+                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(self.phone)
         except Exception as e:
             print('联系人输入出错', e)
 
@@ -84,18 +92,10 @@ class App:
         self.driver.find_element_by_xpath('//div[@class="submit-wrapper"]/button').click()
 
 
-def get_config(section, key):
-    config = configparser.ConfigParser()
-    config.read('config.ini', encoding='UTF-8')
-    return config.get(section, key)
-
-
 if __name__ == '__main__':
     print('版本1.1')
-    dotakey = get_config('info', 'privilege_val')
-    name = get_config('info', 'name')
-    phone = get_config('info', 'phone')
-    myapp = App(dotakey)
+
+    myapp = App()
     myapp.login()
     myapp.detail_page_auto()
-    myapp.confirm_auto(name, phone)
+    myapp.confirm_auto()
