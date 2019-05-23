@@ -149,4 +149,4 @@ dmypy.json
 /config.ini
 .gitignore
 .idea/
-
+*.rar
