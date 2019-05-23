@@ -3,6 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import configparser
+import time
 
 config = configparser.ConfigParser()
 config.read('config.ini', encoding='UTF-8')
@@ -79,17 +80,16 @@ class App:
         if self.express == 'True':
             try:
                 self.driver.find_element_by_xpath('//*[@id="confirmOrder_1"]/div[1]/div[2]/div[2]').click()
-                WebDriverWait(self.driver, 5).until(
-                    EC.presence_of_element_located((By.XPATH, '//div[@class="express-address"]')))
+                time.sleep(2)
             except Exception as e:
                 print('未能成功选择快递', e)
 
         else:
             try:
                 self.driver.find_element_by_xpath(
-                    '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(self.name)
+                    '//div[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(self.name)
                 self.driver.find_element_by_xpath(
-                    '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(self.phone)
+                    '//div[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(self.phone)
             except Exception as e:
                 print('联系人输入出错', e)
 
