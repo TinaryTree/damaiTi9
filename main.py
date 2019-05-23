@@ -14,7 +14,7 @@ class App:
     chromedriver = r"driver/chromedriver.exe"
     driver = webdriver.Chrome(chromedriver)
 
-    def run(self):
+    def detail_page_auto(self):
         self.driver.get('https://passport.damai.cn/login')
         # WebDriverWait(self.driver, 10).until(
         #     EC.presence_of_element_located((By.ID, 'alibaba-login-box')))
@@ -54,6 +54,29 @@ class App:
         print('寻找按钮:', dbuy_button.text)
         dbuy_button.click()
 
+    def confirm_auto(self, name, phone):
+        """自动确认订单"""
+
+        title = self.driver.title
+        while title != '确认订单':
+            title = self.driver.title
+        try:
+            self.driver.find_element_by_xpath(
+                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(name)
+            self.driver.find_element_by_xpath(
+                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(phone)
+        except Exception as e:
+            print('联系人输入出错', e)
+
+        try:
+
+            self.driver.find_element_by_xpath(
+                '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div/label/span[1]/input').click()
+        except Exception as e:
+            print('购票人选择出错', e)
+
+        self.driver.find_element_by_xpath('//div[@class="submit-wrapper"]/button').click()
+
 
 def get_config(section, key):
     config = configparser.ConfigParser()
@@ -63,5 +86,8 @@ def get_config(section, key):
 
 if __name__ == '__main__':
     dotakey = get_config('info', 'privilege_val')
+    name = get_config('info', 'name')
+    phone = get_config('info', 'phone')
     myapp = App(dotakey)
-    myapp.run()
+    myapp.detail_page_auto()
+    myapp.confirm_auto(name, phone)
