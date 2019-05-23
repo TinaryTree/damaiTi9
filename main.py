@@ -91,6 +91,7 @@ def get_config(section, key):
 
 
 if __name__ == '__main__':
+    print('版本1.1')
     dotakey = get_config('info', 'privilege_val')
     name = get_config('info', 'name')
     phone = get_config('info', 'phone')
