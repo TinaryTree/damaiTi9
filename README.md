@@ -3,7 +3,7 @@
 这是一名玩了10年dota依然还是卫士的dotaer为了信仰编写的Ti9抢票工具，仅能帮助你填写特权码并迅速完成第一个页面的提交工作
 
 ## 依赖
-仅支持python3 + Chrome浏览器
+仅支持windows平台，python3 + Chrome浏览器
 
 安装依赖包
 ```
