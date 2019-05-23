@@ -4,10 +4,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import configparser
 
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='UTF-8')
+
 
 def get_config(section, key):
-    config = configparser.ConfigParser()
-    config.read('config.ini', encoding='UTF-8')
     return config.get(section, key)
 
 
@@ -17,6 +18,7 @@ class App:
     phone = get_config('info', 'phone')
     round = get_config('model', 'round')
     quantity = get_config('model', 'quantity')
+    express = get_config('model', 'express')
 
     chromedriver = r"driver/chromedriver.exe"
     driver = webdriver.Chrome(chromedriver)
@@ -74,18 +76,28 @@ class App:
         title = self.driver.title
         while title != '确认订单':
             title = self.driver.title
-        try:
-            self.driver.find_element_by_xpath(
-                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(self.name)
-            self.driver.find_element_by_xpath(
-                '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(self.phone)
-        except Exception as e:
-            print('联系人输入出错', e)
+        if self.express == 'True':
+            try:
+                self.driver.find_element_by_xpath('//*[@id="confirmOrder_1"]/div[1]/div[2]/div[2]').click()
+                WebDriverWait(self.driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, '//div[@class="express-address"]')))
+            except Exception as e:
+                print('未能成功选择快递', e)
+
+        else:
+            try:
+                self.driver.find_element_by_xpath(
+                    '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[1]/div[2]/span/input').send_keys(self.name)
+                self.driver.find_element_by_xpath(
+                    '//*[@id="confirmOrder_1"]/div[1]/div[4]/div[2]/div[2]/span[2]/input').send_keys(self.phone)
+            except Exception as e:
+                print('联系人输入出错', e)
 
         try:
-
             self.driver.find_element_by_xpath(
-                '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div/label/span[1]/input').click()
+                '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div[1]/label/span[1]/input').click()
+            self.driver.find_element_by_xpath(
+                '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div[2]/label/span[1]/input').click()
         except Exception as e:
             print('购票人选择出错', e)
 
@@ -93,7 +105,7 @@ class App:
 
 
 if __name__ == '__main__':
-    print('版本1.1')
+    print('版本1.2')
 
     myapp = App()
     myapp.login()
