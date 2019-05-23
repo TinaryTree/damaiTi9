@@ -14,7 +14,9 @@ class App:
     chromedriver = r"driver/chromedriver.exe"
     driver = webdriver.Chrome(chromedriver)
 
-    def detail_page_auto(self):
+    def login(self):
+        """登陆模块"""
+
         self.driver.get('https://passport.damai.cn/login')
         # WebDriverWait(self.driver, 10).until(
         #     EC.presence_of_element_located((By.ID, 'alibaba-login-box')))
@@ -27,6 +29,10 @@ class App:
         print('登陆成功')
         user_name = self.driver.find_element_by_xpath('//a[@data-spm="duserinfo"]/div').text
         print('账号：', user_name)
+
+    def detail_page_auto(self):
+        """详情页自动"""
+
         self.driver.get('https://detail.damai.cn/item.htm?id=593089517773')
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//button[@data-spm="dconfirm"]')))
@@ -89,5 +95,6 @@ if __name__ == '__main__':
     name = get_config('info', 'name')
     phone = get_config('info', 'phone')
     myapp = App(dotakey)
+    myapp.login()
     myapp.detail_page_auto()
     myapp.confirm_auto(name, phone)
