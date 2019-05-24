@@ -95,7 +95,7 @@ class App:
 
         try:
             self.driver.find_element_by_xpath(
-                '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div[1]/label/span[1]/input').click()
+                '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div/label/span[1]/input').click()
             self.driver.find_element_by_xpath(
                 '//*[@id="confirmOrder_1"]/div[2]/div[2]/div[1]/div[2]/label/span[1]/input').click()
         except Exception as e:
@@ -105,7 +105,7 @@ class App:
 
 
 if __name__ == '__main__':
-    print('版本1.2')
+    print('版本1.2.1')
 
     myapp = App()
     myapp.login()
