@@ -27,7 +27,7 @@ class App:
     if 'windows' == os_name:
         chromedriver = r"driver/chromedriver.exe"
     else:
-	chromedriver = r"driver/chromedriver"
+        chromedriver = r"driver/chromedriver"
     driver = webdriver.Chrome(chromedriver)
 
     def login(self):
