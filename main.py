@@ -4,6 +4,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import configparser
 import time
+import os
+import platform
 
 config = configparser.ConfigParser()
 config.read('config.ini', encoding='UTF-8')
@@ -20,8 +22,12 @@ class App:
     round = get_config('model', 'round')
     quantity = get_config('model', 'quantity')
     express = get_config('model', 'express')
-
-    chromedriver = r"driver/chromedriver.exe"
+    
+    os_name = platform.system().lower()
+    if 'windows' == os_name:
+        chromedriver = r"driver/chromedriver.exe"
+    else:
+	chromedriver = r"driver/chromedriver"
     driver = webdriver.Chrome(chromedriver)
 
     def login(self):
