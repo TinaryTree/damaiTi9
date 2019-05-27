@@ -217,4 +217,5 @@ pyvenv.cfg
 pip-selfcheck.json
 
 /config.ini
-!/config.ini
+
+
